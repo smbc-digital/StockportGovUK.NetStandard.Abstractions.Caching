@@ -4,7 +4,6 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace StockportGovUK.NetStandard.Abstractions.Caching
 {
-
     public class CacheProvider : ICacheProvider
     {
         private readonly CacheProviderConfiguration _cacheProviderConfiguration;
@@ -14,6 +13,7 @@ namespace StockportGovUK.NetStandard.Abstractions.Caching
         public CacheProvider(IDistributedCache distributedCache, CacheProviderConfiguration cacheProviderConfiguration )
         {
             _distributedCache = distributedCache;
+            _cacheProviderConfiguration = cacheProviderConfiguration;
         }
 
         public async Task<string> GetStringAsync(string key)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Distributed;
-
-namespace StockportGovUK.NetStandard.Abstractions.Caching
+﻿namespace StockportGovUK.NetStandard.Abstractions.Caching
 {
     public class CacheProviderConfiguration
     {
