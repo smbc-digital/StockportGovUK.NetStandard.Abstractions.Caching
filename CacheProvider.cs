@@ -4,44 +4,41 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace StockportGovUK.NetStandard.Abstractions.Caching
 {
-    public class CacheProvider
+
+    public class CacheProvider : ICacheProvider
     {
-        private readonly bool _allowCaching;
+        private readonly CacheProviderConfiguration _cacheProviderConfiguration;
 
-        private readonly double _timeout;
+        private readonly IDistributedCache _distributedCache;
 
-        private readonly IDistributedCache _cacheProvider;
-
-        public CacheProvider(IDistributedCache cacheProvider, bool allowCaching, double timeout = 20)
+        public CacheProvider(IDistributedCache distributedCache, CacheProviderConfiguration cacheProviderConfiguration )
         {
-            _allowCaching = allowCaching;
-            _timeout = timeout;
-            _cacheProvider = cacheProvider;
+            _distributedCache = distributedCache;
         }
 
         public async Task<string> GetStringAsync(string key)
         {
-            if (_allowCaching)
-                return await _cacheProvider.GetStringAsync(key);
+            if (_cacheProviderConfiguration.AllowCaching)
+                return await _distributedCache.GetStringAsync(key);
 
             return null;
         }
 
         public async Task SetStringAsync(string key, string value)
         {
-            if (_allowCaching)
+            if (_cacheProviderConfiguration.AllowCaching)
             {
-                await _cacheProvider.SetStringAsync(key, value, new DistributedCacheEntryOptions
+                await _distributedCache.SetStringAsync(key, value, new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_timeout)
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_cacheProviderConfiguration.Timeout)
                 });
             }
         }
 
         public async Task SetStringAsync(string key, string value, DistributedCacheEntryOptions options)
         {
-            if (_allowCaching)
-                await _cacheProvider.SetStringAsync(key, value, options);
+            if (_cacheProviderConfiguration.AllowCaching)
+                await _distributedCache.SetStringAsync(key, value, options);
         }
     }
 }
