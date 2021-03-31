@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 
 namespace StockportGovUK.NetStandard.Abstractions.Caching
 {
@@ -10,10 +11,10 @@ namespace StockportGovUK.NetStandard.Abstractions.Caching
 
         private readonly IDistributedCache _distributedCache;
 
-        public CacheProvider(IDistributedCache distributedCache, CacheProviderConfiguration cacheProviderConfiguration )
+        public CacheProvider(IDistributedCache distributedCache, IOptions<CacheProviderConfiguration> cacheProviderConfiguration )
         {
             _distributedCache = distributedCache;
-            _cacheProviderConfiguration = cacheProviderConfiguration;
+            _cacheProviderConfiguration = cacheProviderConfiguration.Value;
         }
 
         public async Task<string> GetStringAsync(string key)
